@@ -3,6 +3,8 @@ package com.haidar.android.storyapp.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.haidar.android.storyapp.data.model.response.ListStoryItem
@@ -11,9 +13,9 @@ import com.haidar.android.storyapp.dateFormat
 
 class StoryAdapter(
     private val listStory: List<ListStoryItem>
-) : RecyclerView.Adapter<StoryAdapter.ViewHolder>() {
+) : PagingDataAdapter<ListStoryItem, StoryAdapter.ViewHolder>(DIFF_CALLBACK){
 
-    private lateinit var onItemClickCallBack: OnItemClickCallback
+    private var onItemClickCallBack: OnItemClickCallback? = null
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallBack = onItemClickCallback
@@ -27,7 +29,10 @@ class StoryAdapter(
     override fun getItemCount(): Int = listStory.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(listStory[position], onItemClickCallBack)
+        val listStories = getItem(position)
+        if(listStories != null){
+            onItemClickCallBack?.let { holder.bind(story = listStories, it) }
+        }
     }
     class ViewHolder(private val binding: ItemStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -55,5 +60,20 @@ class StoryAdapter(
 
     interface OnItemClickCallback {
         fun onItemClicked(data: ListStoryItem, sharedViews: Array<Pair<View, String>>)
+    }
+
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
+            override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(
+                oldItem: ListStoryItem,
+                newItem: ListStoryItem
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
     }
 }

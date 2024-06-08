@@ -16,10 +16,10 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:title="@string/app_name"
-            app:titleTextColor="@android:color/black"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="@string/app_name"
+            app:titleTextColor="@android:color/black" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -28,15 +28,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="20dp"
-        tools:listitem="@layout/item_story"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/item_story" />
 
     <ProgressBar
         android:id="@+id/pb_stories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:visibility="invisible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_post"
@@ -47,6 +47,18 @@
         android:contentDescription="@string/cd_fab"
         android:src="@drawable/ic_baseline_add_24"
         app:backgroundTint="@color/secondary"
+        app:tint="@android:color/white" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="80dp"
+        android:contentDescription="@string/cd_fab_map"
+        android:src="@drawable/ic_baseline_map_24"
+        app:backgroundTint="@color/lightNavy"
         app:tint="@android:color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

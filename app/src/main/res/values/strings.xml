@@ -31,5 +31,7 @@
     <string name="camerax">Camerax</string>
     <string name="cd_switch_camera">ganti camera</string>
     <string name="cd_take_picture">ambil gambar</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="cd_fab_map">buka maps</string>
 
 </resources>

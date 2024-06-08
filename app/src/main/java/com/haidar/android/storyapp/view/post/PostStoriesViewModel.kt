@@ -27,7 +27,7 @@ class PostStoriesViewModel(private val repository: UserRepository) : ViewModel()
     val error: LiveData<Boolean> = _error
 
 
-    fun postStory(imageFile: File, desc: String) {
+    fun postStory(imageFile: File, desc: String, storyLat: Double, storyLon: Double) {
         _loading.value = true
         val file = reduceFileImage(imageFile)
 
@@ -48,8 +48,8 @@ class PostStoriesViewModel(private val repository: UserRepository) : ViewModel()
                         token = "Bearer $it",
                         file = imageMultipart,
                         description = description,
-                        lat = 0F,
-                        lon = 0F
+                        lat = storyLat,
+                        lon = storyLon
                     )
                 }
 

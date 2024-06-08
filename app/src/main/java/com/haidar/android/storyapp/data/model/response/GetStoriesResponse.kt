@@ -1,6 +1,7 @@
 package com.haidar.android.storyapp.data.model.response
 
 import android.os.Parcelable
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
@@ -18,6 +19,7 @@ data class GetStoriesResponse(
 )
 
 @Parcelize
+@Entity(tableName = "story")
 data class ListStoryItem(
 
     @field:SerializedName("photoUrl")

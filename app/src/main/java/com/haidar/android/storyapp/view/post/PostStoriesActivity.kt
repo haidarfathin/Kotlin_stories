@@ -39,6 +39,10 @@ class PostStoriesActivity : AppCompatActivity() {
     private var getFile: File? = null
     private lateinit var currentImagePath: String
 
+    private var storyLat: Double = 0.0
+    private var storyLon: Double = 0.0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -168,7 +172,7 @@ class PostStoriesActivity : AppCompatActivity() {
             if (!TextUtils.isEmpty(desc) && getFile != null) {
                 lifecycleScope.launch {
                     try {
-                        viewModel.postStory(getFile!!, desc)
+                        viewModel.postStory(getFile!!, desc, storyLat, storyLon)
                         viewModel.loading.observe(this@PostStoriesActivity) { isLoading ->
                             if (!isLoading) {
                                 Toast.makeText(applicationContext, "Berhasil Memposting", Toast.LENGTH_SHORT).show()
