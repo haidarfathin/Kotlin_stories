@@ -7,6 +7,7 @@ import com.haidar.android.storyapp.data.model.response.RegisterResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -50,4 +51,11 @@ interface ApiService {
         @Part("lon") lon: Float,
     ): Call<PostStoriesResponse>
 
+    @GET("stories")
+    suspend fun getPagingStories(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("location") location: Int
+    ): Response<GetStoriesResponse>
 }
