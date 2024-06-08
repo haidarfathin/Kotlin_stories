@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Stories</string>
+    <string name="signup">Daftar</string>
+    <string name="login">Masuk</string>
+    <string name="message_welcome_page">Mau Share apapun, terserah, gaskeunn</string>
+    <string name="title_welcome_page">Selamat datang di Stories!</string>
+    <string name="title_signup_page">Lengkapi data dirimu di bawah ini ya</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="message_login_page">Masukkan dulu datamu ya</string>
+    <string name="title_login_page">Sebelum share, login dulu yuk</string>
+    <string name="name">Nama</string>
+    <string name="greeting">Halo %1$s,</string>
+    <string name="logout">Keluar</string>
+    <string name="username">username</string>
+    <string name="date">dd-mm-yyyy</string>
+    <string name="cd_fab">add new stories</string>
+    <string name="action_settings">setting</string>
+    <string name="share">Share Post</string>
+    <string name="camera">Camera</string>
+    <string name="enter_description">Enter Description...</string>
+    <string name="post">Post Stories</string>
+    <string name="detail_story">Detail Story</string>
+    <string name="open_gallery">Gallery</string>
+    <string name="iv_preview">image preview</string>
+    <string name="errEmail">Format Email Salah</string>
+    <string name="errPassword">Password Harus Memiliki Minimal 8 Karakter</string>
+    <string name="hintEmail">Masukkan Email</string>
+    <string name="hintPassword">Masukkan Password</string>
+    <string name="hintName">Masukkan nama anda</string>
+    <string name="camerax">Camerax</string>
+    <string name="cd_switch_camera">ganti camera</string>
+    <string name="cd_take_picture">ambil gambar</string>
+
+</resources>
