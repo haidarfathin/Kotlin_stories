@@ -1,5 +1,6 @@
 package com.haidar.android.storyapp.view.post
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -7,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -14,12 +16,15 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.haidar.android.storyapp.createCustomTempFile
 import com.haidar.android.storyapp.databinding.ActivityPostStoriesBinding
 import com.haidar.android.storyapp.uriToFile
@@ -42,12 +47,15 @@ class PostStoriesActivity : AppCompatActivity() {
     private var storyLat: Double = 0.0
     private var storyLon: Double = 0.0
 
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityPostStoriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         viewModel.loading.observe(this) { isLoading ->
             binding.pbPost.visibility = if (isLoading) View.VISIBLE else View.GONE
@@ -60,11 +68,13 @@ class PostStoriesActivity : AppCompatActivity() {
         }
 
         checkPermission()
+        fetchLocation()
 
         startGallery()
         startCamera()
         startCameraX()
-        setupPostButton()
+        setupPost()
+        setupPostWithLocation()
     }
 
     private fun startGallery() {
@@ -96,7 +106,11 @@ class PostStoriesActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CODE_PERMISSIONS) {
             if (!permissionGranted()) {
-                Toast.makeText(this@PostStoriesActivity, "Berikan akses kepada kamera", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@PostStoriesActivity,
+                    "Berikan akses kepada kamera",
+                    Toast.LENGTH_SHORT
+                ).show()
                 finish()
             }
         }
@@ -159,6 +173,7 @@ class PostStoriesActivity : AppCompatActivity() {
             binding.ivStoryPreview.setImageURI(imageUri)
         }
     }
+
     private fun startCameraX() {
         binding.btnCameraX.setOnClickListener {
             val intent = Intent(this, CameraActivity::class.java)
@@ -166,7 +181,7 @@ class PostStoriesActivity : AppCompatActivity() {
         }
     }
 
-    fun setupPostButton() {
+    fun setupPost() {
         binding.btnPost.setOnClickListener {
             val desc = binding.etDescription.text.toString()
             if (!TextUtils.isEmpty(desc) && getFile != null) {
@@ -175,11 +190,15 @@ class PostStoriesActivity : AppCompatActivity() {
                         viewModel.postStory(getFile!!, desc, storyLat, storyLon)
                         viewModel.loading.observe(this@PostStoriesActivity) { isLoading ->
                             if (!isLoading) {
-                                Toast.makeText(applicationContext, "Berhasil Memposting", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Berhasil Memposting",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 finish()
                             }
                         }
-                    } catch (e: Exception)  {
+                    } catch (e: Exception) {
                         Log.d("post", e.toString())
                     }
                 }
@@ -189,9 +208,86 @@ class PostStoriesActivity : AppCompatActivity() {
         }
     }
 
+    fun setupPostWithLocation() {
+        binding.btnPost.setOnClickListener {
+            if (isLocationEnabled()) {
+                val desc = binding.etDescription.text.toString()
+                if (!TextUtils.isEmpty(desc) && getFile != null) {
+                    lifecycleScope.launch {
+                        try {
+                            viewModel.postStory(getFile!!, desc, storyLat, storyLon)
+                            viewModel.loading.observe(this@PostStoriesActivity) { isLoading ->
+                                if (!isLoading) {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Berhasil Memposting",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    finish()
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Log.d("post", e.toString())
+                        }
+                    }
+                } else {
+                    Toast.makeText(this, "Harap Lengkapi Data", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("Tidak dapat mengambil lokasi")
+                builder.setMessage("Aktifkan GPS untuk mengirim lokasi terkini")
+                builder.setPositiveButton("Buka Pengaturan") { _, _ ->
+                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    startActivity(intent)
+                }
+                builder.setNegativeButton("Batal") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                val dialog = builder.create()
+                dialog.show()
+            }
+
+        }
+    }
+
+    private fun fetchLocation() {
+        val lastLocation = fusedLocationProviderClient.lastLocation
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                101
+            )
+            return
+        }
+        lastLocation.addOnSuccessListener {
+            if (it != null) {
+                storyLat = it.latitude
+                storyLon = it.longitude
+            }
+        }
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager = getSystemService(LOCATION_SERVICE) as android.location.LocationManager
+        return locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(android.location.LocationManager.NETWORK_PROVIDER)
+    }
+
+
     companion object {
         val PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
         const val CODE_PERMISSIONS = 10
+        const val SPACE_TIME = 1000L
     }
 
 }

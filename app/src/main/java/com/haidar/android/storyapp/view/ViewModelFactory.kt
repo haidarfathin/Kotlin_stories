@@ -7,6 +7,7 @@ import com.haidar.android.storyapp.data.UserRepository
 import com.haidar.android.storyapp.di.Injection
 import com.haidar.android.storyapp.view.login.LoginViewModel
 import com.haidar.android.storyapp.view.main.MainViewModel
+import com.haidar.android.storyapp.view.maps.MapsViewModel
 import com.haidar.android.storyapp.view.post.PostStoriesViewModel
 
 class ViewModelFactory(private val repository: UserRepository) : ViewModelProvider.NewInstanceFactory() {
@@ -22,6 +23,9 @@ class ViewModelFactory(private val repository: UserRepository) : ViewModelProvid
             }
             modelClass.isAssignableFrom(PostStoriesViewModel::class.java) -> {
                 PostStoriesViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(MapsViewModel::class.java) -> {
+                MapsViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

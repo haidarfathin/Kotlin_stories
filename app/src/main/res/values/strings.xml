@@ -33,5 +33,6 @@
     <string name="cd_take_picture">ambil gambar</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="cd_fab_map">buka maps</string>
+    <string name="process_map">Sabar yeee, memuat maps</string>
 
 </resources>
