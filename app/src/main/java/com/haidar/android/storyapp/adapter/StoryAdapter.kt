@@ -12,7 +12,6 @@ import com.haidar.android.storyapp.databinding.ItemStoryBinding
 import com.haidar.android.storyapp.dateFormat
 
 class StoryAdapter(
-    private val listStory: List<ListStoryItem>
 ) : PagingDataAdapter<ListStoryItem, StoryAdapter.ViewHolder>(DIFF_CALLBACK){
 
     private var onItemClickCallBack: OnItemClickCallback? = null
@@ -26,7 +25,6 @@ class StoryAdapter(
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = listStory.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val listStories = getItem(position)

@@ -1,7 +1,6 @@
 package com.haidar.android.storyapp.data.api
 
 import com.haidar.android.storyapp.BuildConfig
-import com.haidar.android.storyapp.data.api.ApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -10,8 +9,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ApiConfig {
     fun getApiServices(): ApiService {
 
-        val loggingInterceptor =
+        val loggingInterceptor = if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        } else {
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
+        }
         val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()

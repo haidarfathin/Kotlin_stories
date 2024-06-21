@@ -34,5 +34,9 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="cd_fab_map">buka maps</string>
     <string name="process_map">Sabar yeee, memuat maps</string>
+    <string name="cd_photo_detail">story photo</string>
+    <string name="loading_timeout">Timeout, mohon coba lagi</string>
+    <string name="retryBtn">coba lagi</string>
+    <string name="cb_post_with_location">Gunakan lokasi terkini?</string>
 
 </resources>

@@ -22,7 +22,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.haidar.android.storyapp.R
 import com.haidar.android.storyapp.databinding.ActivityMapsBinding
 import com.haidar.android.storyapp.view.ViewModelFactory
-import com.haidar.android.storyapp.view.main.MainViewModel
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -51,9 +50,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
         try {
             val success = mMap.setMapStyle(
-                //TODO: fix this
                 MapStyleOptions.loadRawResourceStyle(
-                    this, R.raw.map_stye
+                    this, R.raw.map_style
                 )
             )
             if (!success) {
@@ -79,6 +77,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
     }
+
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             binding.loadingDescTv.visibility = View.VISIBLE

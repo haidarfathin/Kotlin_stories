@@ -74,7 +74,14 @@ class PostStoriesActivity : AppCompatActivity() {
         startCamera()
         startCameraX()
         setupPost()
-        setupPostWithLocation()
+
+        binding.cbUseLocation.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                Log.d("Location", "${storyLat.toString()}, ${storyLon.toString()}")
+                setupPostWithLocation()
+            }
+        }
+
     }
 
     private fun startGallery() {

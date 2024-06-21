@@ -20,8 +20,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.haidar.android.storyapp.R
-import com.haidar.android.storyapp.databinding.ActivityCameraBinding
 import com.haidar.android.storyapp.createCustomTempFile
+import com.haidar.android.storyapp.databinding.ActivityCameraBinding
 
 class CameraActivity : AppCompatActivity() {
 
